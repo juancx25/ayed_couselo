@@ -1,38 +1,38 @@
-#include "vector.c"
-#include "fractionset.c"
-void randomLoadAll(vector *ve);
-void printFraction();
-int main()
-{
-    vector *ve = vector_new(100);
-    
-    randomLoadAll(ve);
-    printf("LLEGUE HASTA ACA JEJE\n");
-    fractionset_t *fr;
-    for (int i=0;i<100;i++)
-    {
-        fr = vector_get(ve,i);
-        printf("%d/%d\n",fsetGetNum(fr),fsetGetDen(fr));
-    }
-    
-    //vector_print(ve,printFraction(printFraction(*fr)));
-    printf("OTRA VEZ LLEGUE HASTA ACA JEJE\n");
-    return 0;
-}
+#include "..\TDAs\fraction.c"
+#include "..\TDAs\vector.c"
 
-void randomLoadAll(vector *ve)
+
+void fraction_randomLoad(vector *ve,int maxSize);
+
+void fraction_randomLoad(vector *ve,int maxSize)
 {
-    fractionset_t *fr = fsetInit();
-    for (int i=0;i<vector_size(ve);i++)
+    fraction *fr = NULL;
+    int den;
+    for (int i=0;i<maxSize;i++)
     {
-        fsetLoadNum(fr,rand() % 100);
-        fsetLoadDen(fr,rand() % 100);
+        fr = fraction_init();
+        fraction_setNum(fr,rand() % 100);
+        den = 0;
+        while (den == 0)
+        {
+            den = rand() % 100;
+        }
+        fraction_setDen(fr,den);
         vector_add(ve,fr);
     }
-    fsetFree(fr);
 }
 
-void printFraction(fractionset_t fr)
+/*int main()
 {
-    //printf("%u/%u",fsetGetNum(fr),fsetGetDen(fr));
-}
+    vector *ve = vector_new(10);
+    
+    fraction_randomLoad(ve,10);
+    fraction *fr;
+    for (int i=0;i<10;i++)
+    {
+        fr = vector_get(ve,i);
+        printf("%d/%d\n",fraction_getNum(fr),fraction_getDen(fr));
+        fraction_free(fr);
+    }
+    return 0;
+}*/
