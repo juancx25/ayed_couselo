@@ -3,8 +3,9 @@
 #include "stdio.h"
 
 vector* vector_cpy(vector *orig);
-vector* bubble_vector_sort(vector *ve,int cmp(void*,void*));
+void vector_sort_bubble(vector *ve, int n, int cmp(void*,void*));
 int fraction_cmp(fraction *fr1,fraction *fr2);
+void swap(vector *ve,int pos1,int pos2);
 
 void main()
 {
@@ -16,33 +17,25 @@ void main()
     vector_print(ve,(void*)fraction_print);
 
     printf("--------------------------------------\n");
-    vector *vresult = bubble_vector_sort(ve,(void*)fraction_cmp);
-    vector_print(vresult,(void*)fraction_print);
+    vector *vc = vector_cpy(ve);
+    vector_sort_bubble(vc,vector_size(vc),(void*)fraction_cmp);
+    vector_print(vc,(void*)fraction_print);
     return;
 }
 
-vector* bubble_vector_sort(vector *ve,int cmp(void*,void*))
+void vector_sort_bubble(vector *ve, int n, int cmp(void*,void*))
 {
-    vector *vout = vector_cpy(ve);
-    int n = vector_size(vout);
-    char swapped = 1;
-    while ((swapped != 0) && (n > 0))
-    {
-        swapped = 0;
-        for (int i=1;i<n;i++)
-        {
-            if ( cmp(vector_get(vout,i-1),vector_get(vout,i)) > 0 )
-            {
-                void* aux = vector_get(vout,i-1);
-                vector_set(vout,i-1,vector_get(vout,i));
-                vector_set(vout,i,aux);
-                swapped = 1;
-            }
-        }    
-        n--;
-    }
+    int i;
+    if (n<2) return;
     
-    return vout;
+    for (i=0;i<n-1;i++)
+    {
+        if (cmp(vector_get(ve,i),vector_get(ve,i+1)) > 0)
+        {
+            swap(ve,i,(i+1));
+        }
+    }
+    vector_sort_bubble(ve,n-1,(void*)cmp);    
 }
 
 vector* vector_cpy(vector *orig)
@@ -63,4 +56,13 @@ int fraction_cmp(fraction *fr1,fraction *fr2)
     if (div1<div2) return -1;
     if (div1==div2) return 0;
     if (div1>div2) return 1;
+}
+
+void swap(vector *ve,int pos1,int pos2)
+{
+    //Recibe las posiciones de un vector e intercambia sus miembros
+    void *aux;
+    aux = vector_get(ve,pos1);
+    vector_set(ve,pos1,vector_get(ve,pos2));
+    vector_set(ve,pos2,aux);
 }
