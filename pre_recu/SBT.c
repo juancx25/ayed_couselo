@@ -1,5 +1,7 @@
 #include "..\TP06\btree_base.c"
 
+/* Dado un árbol binario de búsqueda, crear funciones para obtener su predecesor y sucesor */
+
 void btn_intToStr(btn* node, char* str) {
     if (!node) return;
     sprintf(str, "(%03d)", node->value);
